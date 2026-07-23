@@ -1,17 +1,45 @@
 package com.revizen.app.core.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.revizen.app.core.ui.components.PlaceholderScreen
+import androidx.navigation.navArgument
 import com.revizen.app.features.auth.ui.AuthViewModel
 import com.revizen.app.features.auth.ui.LockScreenRoute
 import com.revizen.app.features.auth.ui.SetupPinScreenRoute
 
 /**
- * Standard Navigation Graph defining transitions across all features.
+ * Placeholder composable shown for all screens that are not yet implemented.
+ */
+@Composable
+private fun RoutePlaceholder(routeName: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = routeName,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+/**
+ * Main navigation graph defining transitions across all ReviZen features.
  */
 @Composable
 fun ReviZenNavGraph(
@@ -25,6 +53,7 @@ fun ReviZenNavGraph(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        // --- Auth ---
         composable(ReviZenRoute.AuthLock.route) {
             LockScreenRoute(
                 viewModel = authViewModel,
@@ -47,66 +76,137 @@ fun ReviZenNavGraph(
             )
         }
 
+        // --- Onboarding ---
         composable(ReviZenRoute.Onboarding.route) {
-            PlaceholderScreen(
-                title = "Welcome to ReviZen",
-                description = "Learn how to optimize your cognitive abilities offline.",
-                onNavigateBack = {
-                    navController.navigate(ReviZenRoute.AuthSetup.route)
-                }
-            )
+            RoutePlaceholder("onboarding")
         }
 
+        // --- Main Tabs ---
         composable(ReviZenRoute.Home.route) {
-            PlaceholderScreen(
-                title = "Dashboard",
-                description = "Welcome back to your cognitive workspace.",
-                onNavigateBack = {
-                    navController.navigate(ReviZenRoute.Settings.route)
+            RoutePlaceholder("home")
+        }
+
+        // --- Memory ---
+        composable(ReviZenRoute.MemoryList.route) {
+            RoutePlaceholder("memory_list")
+        }
+
+        composable(
+            route = ReviZenRoute.MemoryDetail.route,
+            arguments = listOf(navArgument("cardId") { type = NavType.LongType })
+        ) {
+            RoutePlaceholder("memory_detail")
+        }
+
+        composable(
+            route = ReviZenRoute.AddMemory.route,
+            arguments = listOf(
+                navArgument("category") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
                 }
             )
+        ) {
+            RoutePlaceholder("add_memory")
         }
 
-        composable(ReviZenRoute.Habits.route) {
-            PlaceholderScreen(
-                title = "Habits Tracker",
-                description = "Track your routines offline with privacy."
-            )
+        composable(
+            route = ReviZenRoute.EditMemory.route,
+            arguments = listOf(navArgument("cardId") { type = NavType.LongType })
+        ) {
+            RoutePlaceholder("edit_memory")
         }
 
-        composable(ReviZenRoute.Memory.route) {
-            PlaceholderScreen(
-                title = "Memory Palace",
-                description = "Create offline memory rooms and flashcards."
-            )
+        // --- Review ---
+        composable(ReviZenRoute.ReviewSession.route) {
+            RoutePlaceholder("review_session")
         }
 
-        composable(ReviZenRoute.Notes.route) {
-            PlaceholderScreen(
-                title = "Personal Notes",
-                description = "Secure markdown notes with smart categorization."
-            )
+        composable(ReviZenRoute.ReviewResult.route) {
+            RoutePlaceholder("review_result")
         }
 
-        composable(ReviZenRoute.Review.route) {
-            PlaceholderScreen(
-                title = "Spaced Repetition Review",
-                description = "Review items with customized scheduling algorithms."
-            )
+        // --- Habits ---
+        composable(ReviZenRoute.HabitList.route) {
+            RoutePlaceholder("habit_list")
         }
 
+        composable(
+            route = ReviZenRoute.HabitDetail.route,
+            arguments = listOf(navArgument("habitId") { type = NavType.LongType })
+        ) {
+            RoutePlaceholder("habit_detail")
+        }
+
+        composable(ReviZenRoute.AddHabit.route) {
+            RoutePlaceholder("add_habit")
+        }
+
+        // --- Notes ---
+        composable(ReviZenRoute.NoteList.route) {
+            RoutePlaceholder("note_list")
+        }
+
+        composable(
+            route = ReviZenRoute.NoteDetail.route,
+            arguments = listOf(navArgument("noteId") { type = NavType.LongType })
+        ) {
+            RoutePlaceholder("note_detail")
+        }
+
+        composable(ReviZenRoute.AddNote.route) {
+            RoutePlaceholder("add_note")
+        }
+
+        // --- Analytics & Goals ---
         composable(ReviZenRoute.Analytics.route) {
-            PlaceholderScreen(
-                title = "Progression Analytics",
-                description = "Inspect local performance stats and learning curves."
-            )
+            RoutePlaceholder("analytics")
         }
 
+        composable(ReviZenRoute.Goals.route) {
+            RoutePlaceholder("goals")
+        }
+
+        // --- Settings & Profile ---
         composable(ReviZenRoute.Settings.route) {
-            PlaceholderScreen(
-                title = "Settings",
-                description = "Manage local backups, dark mode, and authentication preferences."
-            )
+            RoutePlaceholder("settings")
+        }
+
+        composable(ReviZenRoute.Profile.route) {
+            RoutePlaceholder("profile")
+        }
+
+        // --- Utility Screens ---
+        composable(ReviZenRoute.Search.route) {
+            RoutePlaceholder("search")
+        }
+
+        composable(ReviZenRoute.Focus.route) {
+            RoutePlaceholder("focus")
+        }
+
+        composable(
+            route = ReviZenRoute.FeynmanTest.route,
+            arguments = listOf(navArgument("cardId") { type = NavType.LongType })
+        ) {
+            RoutePlaceholder("feynman_test")
+        }
+
+        composable(ReviZenRoute.Graph.route) {
+            RoutePlaceholder("graph")
+        }
+
+        composable(ReviZenRoute.InterviewHome.route) {
+            RoutePlaceholder("interview_home")
+        }
+
+        composable(ReviZenRoute.Planner.route) {
+            RoutePlaceholder("planner")
+        }
+
+        composable(ReviZenRoute.Palace.route) {
+            RoutePlaceholder("palace")
         }
     }
 }

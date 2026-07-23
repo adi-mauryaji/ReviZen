@@ -210,4 +210,58 @@ The app dependencies configured in `libs.versions.toml`:
   - `gradle/libs.versions.toml` (removed compose-compiler plugin)
   - `PROJECT_CONTEXT.md`
 
+### Session: 2026-07-23 (Prompt 04 - Complete Navigation System)
+- **User Request**: Implement all routes, NavGraph, bottom nav bar, MainScreen scaffold. Placeholder composables only (no real screens yet).
+- **Decisions**:
+  - Used `sealed class ReviZenRoute(val route: String)` with nested objects for all 25 routes.
+  - Routes with path arguments (e.g. `MemoryDetail`, `HabitDetail`, `NoteDetail`, `EditMemory`, `FeynmanTest`) include companion `argsOf()` helpers.
+  - `AddMemory` route supports optional `category` query argument.
+  - Start destination logic: if `AuthState.Unlocked` and `onboardingCompleted == false` → `Onboarding`; else `Home`.
+  - Bottom nav bar hidden on non-tab screens via `AnimatedVisibility` slide animation.
+  - Bottom nav uses `saveState`, `restoreState`, and `launchSingleTop` to prevent back-stack duplication.
+  - Review tab badge shows due card count from `MemoryCardDao.getDueCount()`.
+- **Routes Defined**:
+  1. `Onboarding` → `"onboarding"`
+  2. `AuthLock` → `"auth_lock"`
+  3. `AuthSetup` → `"auth_setup"`
+  4. `Home` → `"home"`
+  5. `MemoryList` → `"memory_list"`
+  6. `MemoryDetail` → `"memory_detail/{cardId}"` (Long path arg)
+  7. `AddMemory` → `"add_memory?category={category}"` (optional String query arg)
+  8. `EditMemory` → `"edit_memory/{cardId}"` (Long path arg)
+  9. `ReviewSession` → `"review_session"`
+  10. `ReviewResult` → `"review_result"`
+  11. `HabitList` → `"habit_list"`
+  12. `HabitDetail` → `"habit_detail/{habitId}"` (Long path arg)
+  13. `AddHabit` → `"add_habit"`
+  14. `NoteList` → `"note_list"`
+  15. `NoteDetail` → `"note_detail/{noteId}"` (Long path arg)
+  16. `AddNote` → `"add_note"`
+  17. `Analytics` → `"analytics"`
+  18. `Goals` → `"goals"`
+  19. `Settings` → `"settings"`
+  20. `Profile` → `"profile"`
+  21. `Search` → `"search"`
+  22. `Focus` → `"focus"`
+  23. `FeynmanTest` → `"feynman_test/{cardId}"` (Long path arg)
+  24. `Graph` → `"graph"`
+  25. `InterviewHome` → `"interview_home"`
+  26. `Planner` → `"planner"`
+  27. `Palace` → `"palace"`
+- **Bottom Nav Tabs** (5):
+  1. Home → `Icons.Filled/Outlined.Home`
+  2. Memory → `Icons.Filled/Outlined.Psychology`
+  3. Review → `Icons.Filled/Outlined.RateReview` (badge: due card count)
+  4. Habits → `Icons.Filled/Outlined.CheckCircle`
+  5. Analytics → `Icons.Filled/Outlined.BarChart`
+- **Files Created**:
+  - `core/navigation/BottomNavItem.kt`
+  - `core/ui/components/BottomNavBar.kt`
+  - `MainScreen.kt`
+- **Files Modified**:
+  - `core/navigation/Routes.kt` (expanded from 10 routes to 27)
+  - `core/navigation/ReviZenNavGraph.kt` (all 27 destinations with placeholder composables)
+  - `MainActivity.kt` (uses MainScreen scaffold, injects UserPreferencesRepository and MemoryCardDao)
+  - `PROJECT_CONTEXT.md`
+
 
